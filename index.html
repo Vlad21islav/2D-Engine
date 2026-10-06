@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Editor</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body class="dark-theme">
+    <script src="script.js"></script>
+
+    <div class="app-container">
+        <!-- Верхняя панель с кнопкой Play -->
+        <button class="btn-play">play</button>
+        
+        <!-- Правое меню -->
+        <div id="menu-panel">
+            <div class="menu-header" onclick="collapse('#menu-panel')">Menu</div>
+            <div class="collapsible">
+                <hr class="divider">
+                <button class="btn-menu">Add shape</button>
+                <button class="btn-menu">Background</button>
+                <button class="btn-menu" onclick="openSettings()">Settings</button>
+                <button class="btn-menu">Download</button>
+            </div>
+        </div>
+
+        <!-- Левая панель свойств -->
+        <div class="properties-panel">
+            <div class="prop-header">Properties</div>
+            <hr class="divider">
+            <button class="btn-prop">Add force</button>
+            <button class="btn-prop">Style</button>
+            <button class="btn-prop">Colliding</button>
+        </div>
+
+        <!-- Выпадающий список (визуально) -->
+        <div class="dropdown-panel">
+            <button class="btn-dropdown">To object</button>
+            <button class="btn-dropdown">On button</button>
+        </div>
+
+        <!-- Центральный объект (квадрат) -->
+        <div class="canvas-area">
+            <div class="object-square">
+                <div class="force-arrow force-right">f=20(on "D")</div>
+                <div class="force-arrow force-down">g=10</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Оверлей + модальное окно -->
+    <div class="modal-overlay" id="settings-modal" onclick="closeSettingsOnOverlay(event)">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+            
+            <!-- Заголовок -->
+            <div class="modal-header">
+                <h2 id="settings-title">Settings</h2>
+                <button class="modal-close" onclick="closeSettings()" aria-label="Close">✕</button>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Содержимое -->
+            <div class="modal-body">
+                
+                <!-- Секция: Тема -->
+                <div class="settings-group">
+                    <label class="settings-label">Theme</label>
+                    <div class="settings-options">
+                        <button class="btn-option active">Auto</button>
+                        <button class="btn-option">Dark</button>
+                        <button class="btn-option">Light</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
