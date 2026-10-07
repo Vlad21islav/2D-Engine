@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Physics Editor</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/context-menu.css">
+    <link rel="stylesheet" href="styles/settings-window.css">
 </head>
-<body class="dark-theme">
-    <script src="script.js"></script>
+<body>
+    <script src="js/script.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/settings-window.js"></script>
 
     <div class="app-container">
         <!-- Верхняя панель с кнопкой Play -->
@@ -39,14 +44,6 @@
             <button class="btn-dropdown">To object</button>
             <button class="btn-dropdown">On button</button>
         </div>
-
-        <!-- Центральный объект (квадрат) -->
-        <div class="canvas-area">
-            <div class="object-square">
-                <div class="force-arrow force-right">f=20(on "D")</div>
-                <div class="force-arrow force-down">g=10</div>
-            </div>
-        </div>
     </div>
     
     <!-- Оверлей + модальное окно -->
@@ -68,9 +65,9 @@
                 <div class="settings-group">
                     <label class="settings-label">Theme</label>
                     <div class="settings-options">
-                        <button class="btn-option active">Auto</button>
-                        <button class="btn-option">Dark</button>
-                        <button class="btn-option">Light</button>
+                        <button class="btn-option" onclick="on_change_theme_button('System')">System</button>
+                        <button class="btn-option" onclick="on_change_theme_button('Dark')">Dark</button>
+                        <button class="btn-option" onclick="on_change_theme_button('Light')">Light</button>
                     </div>
                 </div>
 
