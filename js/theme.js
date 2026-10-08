@@ -1,6 +1,6 @@
-let theme = localStorage.getItem('theme');
-if (theme == null) {
-    theme = 'System';
+let chosen_theme = localStorage.getItem('theme');
+if (chosen_theme == null) {
+    chosen_theme = 'System';
 }
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -22,6 +22,7 @@ function apply_theme(theme) {
 }
 
 function change_theme_button(theme) {
+    chosen_theme = theme
     localStorage.setItem('theme', theme);
     document.querySelectorAll('.btn-option').forEach(button => {
         if (button.textContent.trim() === theme) {
@@ -38,13 +39,15 @@ function on_change_theme_button(theme) {
 }
 
 function handleThemeChange(event) {
-    if (event.matches) {
-        set_theme('Dark');
-    } else {
-        set_theme('Light');
+    if (chosen_theme === 'System') {
+        if (event.matches) {
+            set_theme('Dark');
+        } else {
+            set_theme('Light');
+        }
     }
 }
 
-mediaQuery.addEventListener('change', if (theme === 'System') handleThemeChange);
+mediaQuery.addEventListener('change', handleThemeChange);
 
-apply_theme(theme);
+apply_theme(chosen_theme);

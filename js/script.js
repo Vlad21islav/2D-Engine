@@ -27,5 +27,5 @@ function close_collapses() {
 
 window.onload = function() {
     close_collapses();
-    change_theme_button(theme);
+    change_theme_button(chosen_theme);
 }
