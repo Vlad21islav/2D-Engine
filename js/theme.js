@@ -38,11 +38,13 @@ function on_change_theme_button(theme) {
 }
 
 function handleThemeChange(event) {
-    if (event.matches) {
-        set_theme('Dark');
-    } else {
-        set_theme('Light');
-    }
+    if (theme === 'System') {
+        if (event.matches) {
+            set_theme('Dark');
+        } else {
+            set_theme('Light');
+        }
+   } 
 }
 
 mediaQuery.addEventListener('change', handleThemeChange);
