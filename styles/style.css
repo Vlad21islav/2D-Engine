@@ -34,6 +34,7 @@ canvas {
     height: 100%;
     z-index: 0;            /* под остальным UI */
     display: block;
+    touch-action: none;
 }
 
 /* Главный контейнер с рамкой */

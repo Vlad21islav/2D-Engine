@@ -1,5 +1,6 @@
 let canvas;
 let ctx;
+let dpr;
 
 let cameraX = 0;
 let cameraY = 0;
@@ -26,8 +27,8 @@ function drawBackground() {
 
     ctx.lineWidth = 1;
 
-    const width = canvas.width / (window.devicePixelRatio || 1);
-    const height = canvas.height / (window.devicePixelRatio || 1);
+    const width = canvas.width
+    const height = canvas.height
 
     const startX = Math.floor(cameraX / GRID_STEP) * GRID_STEP;
     const startY = Math.floor(cameraY / GRID_STEP) * GRID_STEP;
@@ -52,7 +53,7 @@ function drawBackground() {
     }
 }
 
-function movingCanvas() {
+function movingOnWheel() {
     canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
 
@@ -62,10 +63,125 @@ function movingCanvas() {
     }, { passive: false });
 }
 
+function movingOnMouse() {
+    let isDragging = false;
+    let startX, startY;
+    let startCameraX, startCameraY;
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startCameraX = cameraX;
+        startCameraY = cameraY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        cameraX = startCameraX - dx;
+        cameraY = startCameraY - dy;
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+}
+
+function movingOnTouch() {
+    let isDragging = false;
+    let lastX = 0, lastY = 0;
+    let velocityX = 0, velocityY = 0;
+    let lastTime = 0;
+    let rafId = null;
+
+    const FRICTION = 0.95;
+
+    function stopInertia() {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+    }
+
+    function startInertia() {
+        function tick() {
+            velocityX *= FRICTION;
+            velocityY *= FRICTION;
+
+            cameraX += velocityX;
+            cameraY += velocityY;
+
+            // Останавливаемся, когда скорость почти нулевая
+            if (Math.abs(velocityX) < 0.1 && Math.abs(velocityY) < 0.1) {
+                velocityX = 0;
+                velocityY = 0;
+                rafId = null;
+                return;
+            }
+
+            rafId = requestAnimationFrame(tick);
+        }
+        rafId = requestAnimationFrame(tick);
+    }
+
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+
+        stopInertia();
+        isDragging = true;
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+        lastTime = performance.now();
+        velocityX = 0;
+        velocityY = 0;
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        const now = performance.now();
+
+        const dx = (x - lastX) * dpr;
+        const dy = (y - lastY) * dpr;
+        const dt = now - lastTime || 16;   // защита от деления на 0
+
+        // Скорость в пикселях за кадр (~16 мс)
+        velocityX = -(dx / dt) * 16;
+        velocityY = -(dy / dt) * 16;
+
+        cameraX -= dx;
+        cameraY -= dy;
+
+        lastX = x;
+        lastY = y;
+        lastTime = now;
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => {
+        isDragging = false;
+        startInertia();
+    }, { passive: true });
+
+    canvas.addEventListener('touchcancel', () => {
+        isDragging = false;
+        startInertia();
+    }, { passive: true });
+}
+
+function movingCanvas() {
+    movingOnMouse();
+    movingOnTouch();
+    movingOnWheel();
+}
+
 function setupCanvas(width = window.innerWidth, height = window.innerHeight) {
     canvas = document.getElementsByTagName('canvas')[0];
     ctx = canvas.getContext("2d");
-    const dpr = window.devicePixelRatio || 1;
+    dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     canvas.style.width = width + 'px';
