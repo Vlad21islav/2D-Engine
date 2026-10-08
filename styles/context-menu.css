@@ -1,4 +1,4 @@
-.properties-panel {
+#context-menu {
     position: absolute;
     top: 100px;
     left: 40px;
@@ -12,6 +12,16 @@
     flex-direction: column;
     gap: 5px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+
+    /* Скрыто по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#context-menu.open {
+    opacity: 1;
+    visibility: visible;
 }
 
 .prop-header {
@@ -36,10 +46,17 @@
     }
 }
 
+.btn-prop.with-dropdown::after {
+    content: '❯';
+    position: absolute;
+    right: 20px;
+
+}
 
 
 
-.dropdown-panel {
+
+#dropdown-panel {
     position: absolute;
     top: 130px;
     left: 220px;
@@ -52,6 +69,16 @@
     flex-direction: column;
     gap: 5px;
     box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+    
+    /* Скрыто по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#dropdown-panel.open {
+    opacity: 1;
+    visibility: visible;
 }
 
 .btn-dropdown {

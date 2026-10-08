@@ -2,14 +2,17 @@ let chosen_theme = localStorage.getItem('theme');
 if (chosen_theme == null) {
     chosen_theme = 'System';
 }
+let site_theme;
 
 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
 function set_theme(theme) {
     if (theme === 'Dark') {
         document.body.className = 'dark-theme';
+        site_theme = 'Dark'
     } else if (theme === 'Light') {
         document.body.className = 'light-theme';
+        site_theme = 'Light';
     }
 }
 
@@ -39,15 +42,19 @@ function on_change_theme_button(theme) {
 }
 
 function handleThemeChange(event) {
-    if (chosen_theme === 'System') {
-        if (event.matches) {
-            set_theme('Dark');
-        } else {
-            set_theme('Light');
-        }
+    if (event.matches) {
+        set_theme('Dark');
+    } else {
+        set_theme('Light');
     }
 }
 
-mediaQuery.addEventListener('change', handleThemeChange);
+function onChangeHandleThemeChange(event) {
+    if (chosen_theme === 'System') {
+        handleThemeChange(event);
+    }
+}
+
+mediaQuery.addEventListener('change', onChangeHandleThemeChange);
 
 apply_theme(chosen_theme);

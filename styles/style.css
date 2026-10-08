@@ -27,16 +27,19 @@ body {
     color: var(--button-text-color);
 }
 
+canvas {
+    position: absolute;
+    inset: 0;              /* top:0; right:0; bottom:0; left:0 */
+    width: 100%;
+    height: 100%;
+    z-index: 0;            /* под остальным UI */
+    display: block;
+}
+
 /* Главный контейнер с рамкой */
 .app-container {
-    position: relative;
     width: 100vw;
     height: 100vh;
-    background-color: var(--background-color);
-    background-image: 
-        linear-gradient(var(--button-background-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--button-background-color) 1px, transparent 1px);
-    background-size: 40px 40px;
     box-shadow: 10px 10px 20px rgba(0,0,0,0.5), -5px -5px 15px rgba(255,255,255,0.05);
     overflow: hidden;
 }
