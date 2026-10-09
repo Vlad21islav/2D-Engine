@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/menu.css">
     <link rel="stylesheet" href="styles/context-menu.css">
     <link rel="stylesheet" href="styles/settings-window.css">
+    <link rel="stylesheet" href="styles/coords.css">
 </head>
 <body>
     <script src="js/script.js"></script>
@@ -15,6 +16,8 @@
     <script src="js/settings-window.js"></script>
     <script src="js/context-menu.js"></script>
     <script src="js/canvas.js" defer></script>
+    <script src="js/canvas-add-shapes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <canvas></canvas>
 
@@ -27,7 +30,7 @@
             <div class="menu-header" onclick="collapse('#menu-panel')">Menu</div>
             <div class="collapsible">
                 <hr class="divider">
-                <button class="btn-menu">Add shape</button>
+                <button class="btn-menu with-dropdown" onmouseenter="showDropdown(this, [['Rectangle', 'addRect()']])" onmouseleave="scheduleHideDropdown()">Add shape</button>
                 <button class="btn-menu">Background</button>
                 <button class="btn-menu" onclick="openSettings()">Settings</button>
                 <button class="btn-menu">Download</button>
@@ -38,7 +41,7 @@
         <div id="context-menu">
             <div class="prop-header">Properties</div>
             <hr class="divider">
-            <button class="btn-prop with-dropdown" onmouseenter="showDropdown(this)" onmouseleave="scheduleHideDropdown()">Add force</button>
+            <button class="btn-prop with-dropdown" onmouseenter="showDropdown(this, [['To object', NaN], ['On button', NaN]])" onmouseleave="scheduleHideDropdown()">Add force</button>
             <button class="btn-prop">Style</button>
             <button class="btn-prop">Colliding</button>
         </div>
@@ -47,8 +50,14 @@
         <div id="dropdown-panel" 
             onmouseenter="cancelHideDropdown()"
             onmouseleave="scheduleHideDropdown()">
-            <button class="btn-dropdown">To object</button>
-            <button class="btn-dropdown">On button</button>
+        </div>
+
+        <div id="cursor-coords" class="coords">
+            <span class="coords__label">x:</span>
+            <span class="coords__value" id="coord-x">0</span>
+            <span class="coords__sep">|</span>
+            <span class="coords__label">y:</span>
+            <span class="coords__value" id="coord-y">0</span>
         </div>
     </div>
     

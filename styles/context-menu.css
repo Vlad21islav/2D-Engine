@@ -32,6 +32,7 @@
 }
 
 .btn-prop {
+    position: relative;
     background: transparent;
     box-shadow: none;
     text-align: left;
@@ -46,11 +47,10 @@
     }
 }
 
-.btn-prop.with-dropdown::after {
+.with-dropdown::after {
     content: '❯';
     position: absolute;
-    right: 20px;
-
+    right: 10px;
 }
 
 

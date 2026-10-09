@@ -1,0 +1,81 @@
+/* ============================================
+   КООРДИНАТЫ КУРСОРА
+   ============================================ */
+
+.coords {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+
+    display: flex;
+    gap: 4px;
+
+    padding: 8px 14px;
+    border-radius: 12px;
+
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+
+    border: 2px solid #1a1a1a;
+    box-shadow: 
+        3px 3px 8px rgba(0, 0, 0, 0.4),
+        -2px -2px 6px rgba(255, 255, 255, 0.05);
+
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+
+    user-select: none;
+    pointer-events: none;   /* не мешает кликам по canvas */
+}
+
+/* Строка координат */
+.coords__row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* Подпись (screen / world) */
+.coords__label {
+    opacity: 0.6;
+    font-weight: 500;
+    min-width: 55px;
+}
+
+/* Значение */
+.coords__value {
+    font-weight: 600;
+    color: var(--button-text-color-hover);
+    font-variant-numeric: tabular-nums;   /* чтобы цифры не "прыгали" */
+    min-width: 70px;
+    text-align: right;
+}
+
+/* Разделитель для однострочного варианта */
+.coords__sep {
+    opacity: 0.3;
+    margin: 0 2px;
+}
+
+/* ============================================
+   АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ
+   ============================================ */
+
+@media (max-width: 600px) {
+    .coords {
+        bottom: 10px;
+        left: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .coords__label {
+        min-width: 45px;
+    }
+
+    .coords__value {
+        min-width: 55px;
+    }
+}

@@ -27,6 +27,7 @@
 }
 
 .btn-menu {
+    position: relative;
     background: transparent;
     box-shadow: none;
     text-align: left;

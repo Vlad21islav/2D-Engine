@@ -27,12 +27,20 @@ function hideContextMenu() {
 
 let hideTimeout = null;
 
-function showDropdown(button) {
+function showDropdown(button, inner_buttons) {
     // Отменяем запланированное скрытие, если курсор вернулся
     clearTimeout(hideTimeout);
 
     const rect = button.getBoundingClientRect();
     const dropdown = document.getElementById('dropdown-panel');
+    dropdown.innerHTML = '';
+    inner_buttons.forEach(button => {
+        let button_text = button[0];
+        let on_click = button[1];
+        dropdown.innerHTML += `
+            <button class="btn-dropdown" onclick="${on_click}">${button_text}</button>
+            `
+    });
     const menu = document.getElementById('context-menu');
 
     let x = rect.x + menu.offsetWidth;

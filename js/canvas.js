@@ -1,3 +1,10 @@
+const { Engine, Composite, Bodies, Body, Events, Vector } = Matter;
+
+const engine = Engine.create();
+engine.gravity.y = 0;
+
+let canvas_mode = 'reading';
+
 let canvas;
 let ctx;
 let dpr;
@@ -6,15 +13,9 @@ let cameraX = 0;
 let cameraY = 0;
 const GRID_STEP = 40;
 
+let mouseX, mouseY;
+
 function drawBackground() {
-    // background-color: var(--background-color);
-    // background-image: 
-    //     linear-gradient(var(--button-background-color) 1px, transparent 1px),
-    //     linear-gradient(90deg, var(--button-background-color) 1px, transparent 1px);
-    // background-size: 40px 40px;
-
-    // console.log(site_theme);
-
     if (site_theme === 'Dark') {
         ctx.fillStyle = '#2b2b2b';
         ctx.strokeStyle = '#3d3d3d';
@@ -69,6 +70,8 @@ function movingOnMouse() {
     let startCameraX, startCameraY;
 
     canvas.addEventListener('mousedown', (e) => {
+        if (e.button !== 2) return;
+
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
@@ -86,7 +89,9 @@ function movingOnMouse() {
         cameraY = startCameraY - dy;
     });
 
-    window.addEventListener('mouseup', () => {
+    window.addEventListener('mouseup', (e) => {
+        if (e.button !== 2) return;
+
         isDragging = false;
     });
 }
@@ -131,8 +136,8 @@ function movingOnTouch() {
 
         stopInertia();
         isDragging = true;
-        lastX = e.touches[0].clientX;
-        lastY = e.touches[0].clientY;
+        lastX = mouseX;
+        lastY = mouseY;
         lastTime = performance.now();
         velocityX = 0;
         velocityY = 0;
@@ -141,15 +146,14 @@ function movingOnTouch() {
     canvas.addEventListener('touchmove', (e) => {
         if (!isDragging || e.touches.length !== 1) return;
 
-        const x = e.touches[0].clientX;
-        const y = e.touches[0].clientY;
+        const x = mouseX;
+        const y = mouseY;
         const now = performance.now();
 
         const dx = (x - lastX) * dpr;
         const dy = (y - lastY) * dpr;
-        const dt = now - lastTime || 16;   // защита от деления на 0
+        const dt = now - lastTime || 16;
 
-        // Скорость в пикселях за кадр (~16 мс)
         velocityX = -(dx / dt) * 16;
         velocityY = -(dy / dt) * 16;
 
@@ -178,6 +182,20 @@ function movingCanvas() {
     movingOnWheel();
 }
 
+function drawBodies() {
+    for (let body of Composite.allBodies(engine.world)) {
+        ctx.save();
+        ctx.translate(-cameraX, -cameraY);
+        ctx.translate(body.position.x, body.position.y);
+        ctx.rotate(body.angle);
+        
+        ctx.fillStyle = '#ff0000';
+        ctx.fillRect(-body.bounds.max.x + body.bounds.min.x, -body.bounds.max.y + body.bounds.min.y, 
+                     body.bounds.max.x - body.bounds.min.x, body.bounds.max.y - body.bounds.min.y);
+        ctx.restore();
+    }
+}
+
 function setupCanvas(width = window.innerWidth, height = window.innerHeight) {
     canvas = document.getElementsByTagName('canvas')[0];
     ctx = canvas.getContext("2d");
@@ -191,14 +209,23 @@ function setupCanvas(width = window.innerWidth, height = window.innerHeight) {
     loop();
 }
 
-function update() {
-    drawBackground();
-}
-
 function loop() {
-    update();
+    drawBackground();
+    drawBodies();
+    Engine.update(engine, 1000 / 60);
+
+    if (canvas_mode === 'drawing_shape') {
+        setShapePoint();
+    }
 
     requestAnimationFrame(loop);
 }
+
+function updateCoordsLabel(mouseX, mouseY) {
+    document.getElementById('coord-x').innerText = mouseX + cameraX;
+    document.getElementById('coord-y').innerText = mouseY + cameraY;
+}
+
+document.addEventListener('mousemove', (event) => {mouseX = event.clientX; mouseY = event.clientY; updateCoordsLabel(mouseX, mouseY)});
 
 setupCanvas();
